@@ -11,10 +11,23 @@ const TopRated = () => {
     const [activeTVList, setActiveTVList] = useState(false);
 
     useEffect(() => {
-        setTimeout(() => {
-            setLatestMoviesData(topRatedMovies);
-            setLatestTVData(topRatedTV);
-        }, 200);
+        let isDataAvailable = false;
+
+        if (topRatedMovies && topRatedTV) fetchData();
+
+        function fetchData() {
+            if (isDataAvailable) return;
+
+            setTimeout(() => {
+                if (topRatedMovies && topRatedTV) {
+                    isDataAvailable = true;
+                    setLatestMoviesData(topRatedMovies);
+                    setLatestTVData(topRatedTV);
+                } else {
+                    fetchData();
+                }
+            }, 100);
+        }
     }, [topRatedMovies, topRatedTV]);
 
     const handleActiveList = (type) => {
@@ -61,7 +74,7 @@ const TopRated = () => {
                     {activeMovieList &&
                         topRatedMoviesData.map((movie, idx) => (
                             <div
-                                className="col-6 col-md-3 col-lg-2 position-relative mb-4"
+                                className="col-6 col-md-4 col-lg-3 col-xl-2 position-relative mb-4"
                                 key={`top-rated-movies-${idx}`}
                             >
                                 <div className="badge-hd">HD</div>
@@ -143,7 +156,7 @@ const TopRated = () => {
                     {activeTVList &&
                         topRatedTVData.map((tv, idx) => (
                             <div
-                                className="col-6 col-md-3 col-lg-2 position-relative mb-4"
+                                className="col-6 col-md-4 col-lg-3 col-xl-2 position-relative mb-4"
                                 key={`top-rated-tv-${idx}`}
                             >
                                 <div className="badge-hd">HD</div>

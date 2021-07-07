@@ -6,8 +6,9 @@ const initialState = {
     topRatedTV: [],
     discoverMovies: [],
     discoverTV: [],
-    discoverMovieDetails: {},
-    discoverTVDetails: {},
+    discoverMovieTVDetails: {},
+    similarMovieTV: [],
+    personDetail: {}
 };
 
 const MDContext = createContext();

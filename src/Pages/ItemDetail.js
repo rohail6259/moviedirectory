@@ -1,34 +1,61 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { MDContext } from "../Services/context/context";
+import { Link } from "react-router-dom";
 import { FirstLetterCapital } from "../Utils/FirstLetterCapital";
 
 const ItemDetail = ({ match }) => {
-    const { url } = match;
+    const {
+        params: { id },
+        url,
+    } = match;
 
     const { contextData, dispatch } = useContext(MDContext);
-    const { discoverMovieDetails, discoverTVDetails } = contextData;
+    const { discoverMovieTVDetails, similarMovieTV } = contextData;
 
     const [itemDetailData, setItemDetailData] = useState({});
+    const [similarData, setSimilarData] = useState([]);
 
     const pathId = useRef(url);
-    const cateogory = useRef(url.split("/")[1]);
+    const category = useRef(url.split("/")[1]);
 
     useEffect(() => {
         dispatch({
-            type: "GET_DISCOVER_MOVIES_DETAILS",
-            payload: { pathId: pathId.current },
+            type: "GET_DISCOVER_MOVIES_TV_DETAILS",
+            payload: { pathId: pathId.current, type: category.current },
         });
     }, [dispatch]);
 
     useEffect(() => {
+        dispatch({
+            type: "GET_SIMILAR_MOVIE_TV",
+            payload: { id },
+        });
+    }, [dispatch, id]);
+
+    useEffect(() => {
+        let isDataAvailable = false;
+
+        if (discoverMovieTVDetails) fetchData();
+
+        function fetchData() {
+            if (isDataAvailable) return;
+
+            setTimeout(() => {
+                if (discoverMovieTVDetails) {
+                    isDataAvailable = true;
+                    setItemDetailData(discoverMovieTVDetails);
+                } else {
+                    fetchData();
+                }
+            }, 100);
+        }
+    }, [discoverMovieTVDetails]);
+
+    useEffect(() => {
         setTimeout(() => {
-            setItemDetailData(
-                cateogory.current === "movie"
-                    ? discoverMovieDetails
-                    : discoverTVDetails
-            );
+            setSimilarData(similarMovieTV);
         }, 1000);
-    }, [discoverMovieDetails, discoverTVDetails]);
+    }, [similarMovieTV]);
 
     return (
         <section>
@@ -37,8 +64,10 @@ const ItemDetail = ({ match }) => {
                     {/* HERO VIDEO */}
                     <div className="col-12">
                         <h5 className="text-white">
-                            Home / {FirstLetterCapital(cateogory.current)} /{" "}
-                            {itemDetailData?.movieData?.original_title}
+                            Home / {FirstLetterCapital(category.current)} /{" "}
+                            {category.current === "movie"
+                                ? itemDetailData?.movieTVData?.original_title
+                                : itemDetailData?.movieTVData?.original_name}
                         </h5>
                         <video
                             preload="auto"
@@ -49,31 +78,40 @@ const ItemDetail = ({ match }) => {
                     </div>
                     {/* SEPARATOR */}
                     <div className="hr"></div>
-                    {/* INFO */}
+                    {/* MOVIE, CAST & CREW INFO */}
                     <div className="col-12">
+                        {/* MOVIE */}
                         <div className="row">
                             <div className="d-none d-md-flex col-md-4 col-lg-3 col-xl-2">
                                 <img
                                     className="img-fluid poster"
                                     loading="eager"
-                                    src={`${process.env.REACT_APP_IMAGE_API}/w500/${itemDetailData?.movieData?.poster_path}`}
+                                    src={`${process.env.REACT_APP_IMAGE_API}/w500/${itemDetailData?.movieTVData?.poster_path}`}
                                     alt={
-                                        itemDetailData?.movieData
-                                            ?.original_title
+                                        category.current === "movie"
+                                            ? itemDetailData?.movieTVData
+                                                  ?.original_title
+                                            : itemDetailData?.movieTVData
+                                                  ?.original_name
                                     }
                                 />
                             </div>
                             <div className="col">
                                 <div className="d-flex align-items-center justify-content-between">
                                     <h2 className="text-white">
-                                        {
-                                            itemDetailData?.movieData
-                                                ?.original_title
-                                        }{" "}
+                                        {category.current === "movie"
+                                            ? itemDetailData?.movieTVData
+                                                  ?.original_title
+                                            : itemDetailData?.movieTVData
+                                                  ?.original_name}{" "}
                                         {`(${
-                                            itemDetailData?.movieData?.release_date?.split(
-                                                "-"
-                                            )[0]
+                                            category.current === "movie"
+                                                ? itemDetailData?.movieTVData?.release_date?.split(
+                                                      "-"
+                                                  )[0]
+                                                : itemDetailData?.movieTVData?.first_air_date?.split(
+                                                      "-"
+                                                  )[0]
                                         })`}
                                     </h2>
                                     <h6 className="text-white d-flex">
@@ -131,7 +169,10 @@ const ItemDetail = ({ match }) => {
                                                 />
                                             </g>
                                         </svg>
-                                        {itemDetailData?.movieData?.vote_count}
+                                        {
+                                            itemDetailData?.movieTVData
+                                                ?.vote_count
+                                        }
                                     </h6>
                                 </div>
                                 <div className="d-flex align-items-center justify-content-space">
@@ -152,25 +193,26 @@ const ItemDetail = ({ match }) => {
                                         </svg>
                                         <small className="text-white">
                                             {
-                                                itemDetailData?.movieData
+                                                itemDetailData?.movieTVData
                                                     ?.vote_average
                                             }
                                         </small>
                                     </div>
                                     <small className="text-white">
-                                        {itemDetailData?.movieData?.runtime} min
+                                        {itemDetailData?.movieTVData?.runtime}{" "}
+                                        min
                                     </small>
                                 </div>
                                 <p className="text-white pt-3">
-                                    {itemDetailData?.movieData?.overview}
+                                    {itemDetailData?.movieTVData?.overview}
                                 </p>
                                 <ul className="list-unstyled text-white">
                                     <li className="d-flex mb-1">
-                                        <div className="col-2 px-0">
+                                        <div className="col-3 col-md-3 col-lg-2 px-0">
                                             Genre:{" "}
                                         </div>
                                         <div className="col d-flex px-0">
-                                            {itemDetailData?.movieData?.genres?.map(
+                                            {itemDetailData?.movieTVData?.genres?.map(
                                                 (e, idx) => (
                                                     <span
                                                         key={`genre-${idx}`}
@@ -179,8 +221,8 @@ const ItemDetail = ({ match }) => {
                                                         {e.name}
                                                         {idx <
                                                         itemDetailData
-                                                            ?.movieData?.genres
-                                                            ?.length -
+                                                            ?.movieTVData
+                                                            ?.genres?.length -
                                                             1
                                                             ? ", "
                                                             : ""}
@@ -190,50 +232,68 @@ const ItemDetail = ({ match }) => {
                                         </div>
                                     </li>
                                     <li className="d-flex mb-1">
-                                        <div className="col-2 px-0">
+                                        <div className="col-3 col-md-3 col-lg-2 px-0">
                                             Revenue:{" "}
                                         </div>
                                         <div className="col px-0">
-                                            ${" "}
-                                            {itemDetailData?.movieData?.revenue}
+                                            {itemDetailData?.movieTVData
+                                                ?.revenue > 0 ? (
+                                                `$ ${itemDetailData?.movieTVData?.revenue}`
+                                            ) : (
+                                                <p className="text-white">
+                                                    Not Available
+                                                </p>
+                                            )}
                                         </div>
                                     </li>
                                     <li className="d-flex mb-1">
-                                        <div className="col-2 px-0">
+                                        <div className="col-3 col-md-3 col-lg-2 px-0">
                                             Budget:{" "}
                                         </div>
                                         <div className="col px-0">
-                                            ${" "}
-                                            {itemDetailData?.movieData?.budget}
+                                            {itemDetailData?.movieTVData
+                                                ?.budget > 0 ? (
+                                                `$ ${itemDetailData?.movieTVData?.budget}`
+                                            ) : (
+                                                <p className="text-white">
+                                                    Not Available
+                                                </p>
+                                            )}
                                         </div>
                                     </li>
                                     <li className="d-flex mb-1">
-                                        <div className="col-2 px-0">
+                                        <div className="col-3 col-md-3 col-lg-2 px-0">
                                             Status:{" "}
                                         </div>
                                         <div className="col px-0">
-                                            {itemDetailData?.movieData?.status}
+                                            {
+                                                itemDetailData?.movieTVData
+                                                    ?.status
+                                            }
                                         </div>
                                     </li>
                                     <li className="d-flex mb-1">
-                                        <div className="col-2 px-0">
+                                        <div className="col-3 col-md-3 col-lg-2 px-0">
                                             Language:{" "}
                                         </div>
                                         <div className="col px-0">
-                                            {itemDetailData?.movieData
+                                            {itemDetailData?.movieTVData
                                                 ?.spoken_languages?.length > 0
-                                                ? itemDetailData.movieData
+                                                ? itemDetailData.movieTVData
                                                       ?.spoken_languages[0]
                                                       ?.name
                                                 : ""}
                                         </div>
                                     </li>
                                     <li className="d-flex mb-1">
-                                        <div className="col-2 px-0">
+                                        <div className="col-3 col-md-3 col-lg-2 px-0">
                                             Tagline:{" "}
                                         </div>
                                         <div className="col px-0">
-                                            {itemDetailData?.movieData?.tagline}
+                                            {
+                                                itemDetailData?.movieTVData
+                                                    ?.tagline
+                                            }
                                         </div>
                                     </li>
                                 </ul>
@@ -242,42 +302,192 @@ const ItemDetail = ({ match }) => {
                         {/* CAST */}
                         <div className="cast py-5">
                             <h2 className="text-white pb-2">Cast</h2>
-                            <div className="row flex-row flex-nowrap">
-                                {itemDetailData?.creditData?.cast?.map(
-                                    (cast, idx) => (
-                                        <div
-                                            key={`cast-${idx}`}
-                                            className="col-auto"
-                                        >
-                                            <img
-                                                className="img-fluid"
-                                                src={`${process.env.REACT_APP_IMAGE_API}/w500/${cast.profile_path}`}
-                                                alt={cast.name}
-                                            />
-                                        </div>
-                                    )
-                                )}
-                            </div>
+                            {itemDetailData?.creditData?.cast.length > 30 ? (
+                                <div className="row flex-row flex-nowrap">
+                                    {itemDetailData?.creditData?.cast?.map(
+                                        (cast, idx) => {
+                                            return cast.profile_path !==
+                                                null ? (
+                                                <div
+                                                    key={`cast-${idx}`}
+                                                    className="col-auto"
+                                                >
+                                                    <Link
+                                                        to={`/person/${cast.id}/${category.current}`}
+                                                    >
+                                                        <img
+                                                            className="img-fluid"
+                                                            src={`${process.env.REACT_APP_IMAGE_API}/w500/${cast.profile_path}`}
+                                                            alt={cast.name}
+                                                        />
+                                                        <h6 className="text-white pt-2 name">
+                                                            {cast.name}
+                                                        </h6>
+                                                        <h6 className="text-white character-name">
+                                                            {cast.character}
+                                                        </h6>
+                                                    </Link>
+                                                </div>
+                                            ) : (
+                                                ""
+                                            );
+                                        }
+                                    )}
+                                </div>
+                            ) : (
+                                <p className="text-white text-center">
+                                    No Cast Members Found!
+                                </p>
+                            )}
                         </div>
                         {/* CREW */}
                         <div className="crew py-5">
                             <h2 className="text-white pb-2">Crew</h2>
-                            <div className="row flex-row flex-nowrap">
-                                {itemDetailData?.creditData?.crew?.map(
-                                    (cast, idx) => (
+                            {itemDetailData?.creditData?.crew.length > 1 ? (
+                                <div className="row flex-row flex-nowrap">
+                                    {itemDetailData?.creditData?.crew?.map(
+                                        (crew, idx) => {
+                                            return crew.profile_path !==
+                                                null ? (
+                                                <div
+                                                    key={`cast-${idx}`}
+                                                    className="col-auto"
+                                                >
+                                                    <Link
+                                                        to={`/person/${crew.id}/${category.current}`}
+                                                    >
+                                                        <img
+                                                            className="img-fluid"
+                                                            src={`${process.env.REACT_APP_IMAGE_API}/w500/${crew.profile_path}`}
+                                                            alt={crew.name}
+                                                        />
+                                                        <h6 className="text-white pt-2 name">
+                                                            {crew.name}
+                                                        </h6>
+                                                        <h6 className="text-white character-name">
+                                                            {crew.job}
+                                                        </h6>
+                                                    </Link>
+                                                </div>
+                                            ) : (
+                                                ""
+                                            );
+                                        }
+                                    )}
+                                </div>
+                            ) : (
+                                <p className="text-white text-center">
+                                    No Crew Members Found!
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                    {/* SIMILAR MOVIES */}
+                    <div className="col-12">
+                        <div className="cast py-5">
+                            <h2 className="text-white pb-2">
+                                Similar{" "}
+                                {category.current === "movie"
+                                    ? "Movies"
+                                    : "TV Series"}
+                            </h2>
+                            {similarData.length > 0 ? (
+                                <div className="row flex-row flex-nowrap">
+                                    {similarData.map((movieTV, idx) => (
                                         <div
-                                            key={`cast-${idx}`}
-                                            className="col-auto"
+                                            className="col-6 col-md-3 col-lg-2 position-relative mb-4 similar"
+                                            key={`similar-${idx}`}
                                         >
+                                            <div className="badge-hd">HD</div>
                                             <img
-                                                className="img-fluid"
-                                                src={`${process.env.REACT_APP_IMAGE_API}/w500/${cast.profile_path}`}
-                                                alt={cast.name}
+                                                className="img-fluid poster"
+                                                loading="eager"
+                                                src={`${process.env.REACT_APP_IMAGE_API}/w500/${movieTV.poster_path}`}
+                                                alt={movieTV.original_title}
                                             />
+                                            <div className="col-12 px-0 mt-2 movie-info">
+                                                <p className="mb-1 title">
+                                                    {movieTV.original_title}
+                                                </p>
+                                                <div className="d-flex align-items-center justify-content-between">
+                                                    <div className="d-flex">
+                                                        <small>
+                                                            {category.current ===
+                                                            "movie"
+                                                                ? movieTV?.release_date?.split(
+                                                                      "-"
+                                                                  )[0]
+                                                                : movieTV?.first_air_date?.split(
+                                                                      "-"
+                                                                  )[0]}{" "}
+                                                            |
+                                                        </small>
+                                                        <svg
+                                                            className="mx-1"
+                                                            width="16"
+                                                            height="16"
+                                                            viewBox="0 0 24 24"
+                                                        >
+                                                            <path
+                                                                d="m23.363 8.584-7.378-1.127-3.307-7.044c-.247-.526-1.11-.526-1.357 0l-3.306 7.044-7.378 1.127c-.606.093-.848.83-.423 1.265l5.36 5.494-1.267 7.767c-.101.617.558 1.08 1.103.777l6.59-3.642 6.59 3.643c.54.3 1.205-.154 1.103-.777l-1.267-7.767 5.36-5.494c.425-.436.182-1.173-.423-1.266z"
+                                                                fill="#ffc107"
+                                                            />
+                                                        </svg>
+                                                        <small>
+                                                            {
+                                                                movieTV.vote_average
+                                                            }
+                                                        </small>
+                                                    </div>
+                                                    <div className="d-flex align-items-center">
+                                                        <svg
+                                                            className="mr-1"
+                                                            width="16"
+                                                            height="16"
+                                                            viewBox="0 0 232.914 232.914"
+                                                        >
+                                                            <g>
+                                                                <path d="M9,64.099c-4.971,0-9,4.029-9,9v86.716c0,4.971,4.029,9,9,9s9-4.029,9-9V73.099C18,68.128,13.971,64.099,9,64.099z" />
+                                                                <path
+                                                                    d="M51.983,38.092c-4.971,0-9,4.029-9,9v138.73c0,4.971,4.029,9,9,9s9-4.029,9-9V47.092
+		C60.983,42.121,56.954,38.092,51.983,38.092z"
+                                                                />
+                                                                <path
+                                                                    d="M94.966,1.896c-4.971,0-9,4.029-9,9v211.121c0,4.971,4.029,9,9,9s9-4.029,9-9V10.896
+		C103.966,5.926,99.937,1.896,94.966,1.896z"
+                                                                />
+                                                                <path
+                                                                    d="M137.948,54.361c-4.971,0-9,4.029-9,9v106.193c0,4.971,4.029,9,9,9s9-4.029,9-9V63.361
+		C146.948,58.39,142.919,54.361,137.948,54.361z"
+                                                                />
+                                                                <path
+                                                                    d="M180.931,64.099c-4.971,0-9,4.029-9,9v86.716c0,4.971,4.029,9,9,9s9-4.029,9-9V73.099
+		C189.931,68.128,185.901,64.099,180.931,64.099z"
+                                                                />
+                                                                <path
+                                                                    d="M223.914,92.919c-4.971,0-9,4.029-9,9v29.077c0,4.971,4.029,9,9,9s9-4.029,9-9v-29.077
+		C232.914,96.948,228.885,92.919,223.914,92.919z"
+                                                                />
+                                                            </g>
+                                                        </svg>
+                                                        <small>
+                                                            {movieTV.original_language.toUpperCase()}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    )
-                                )}
-                            </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-center text-white">
+                                    No Similar{" "}
+                                    {category.current === "movie"
+                                        ? "Movies"
+                                        : "TV Series"}{" "}
+                                    Found!
+                                </p>
+                            )}
                         </div>
                     </div>
                 </div>

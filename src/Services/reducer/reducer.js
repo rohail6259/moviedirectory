@@ -5,8 +5,9 @@ import {
     getTopRatedTV,
     getDiscoverTVSeries,
     getDiscoverMovies,
-    getDiscoverMoviesDetails,
-    getDiscoverTVDetails,
+    getDiscoverMoviesTVDetails,
+    getSimilarMovieTV,
+    getPersonDetails,
 } from "../actions/actions";
 
 export const reducer = (contextData = initialState, { type, payload }) => {
@@ -36,15 +37,24 @@ export const reducer = (contextData = initialState, { type, payload }) => {
             getDiscoverMovies(discoverMovies, payload.path);
             return { ...contextData, discoverMovies };
 
-        case "GET_DISCOVER_MOVIES_DETAILS":
-            let discoverMovieDetails = {};
-            getDiscoverMoviesDetails(discoverMovieDetails, payload.pathId);
-            return { ...contextData, discoverMovieDetails };
+        case "GET_DISCOVER_MOVIES_TV_DETAILS":
+            let discoverMovieTVDetails = {};
+            getDiscoverMoviesTVDetails(
+                discoverMovieTVDetails,
+                payload.pathId,
+                payload.type
+            );
+            return { ...contextData, discoverMovieTVDetails };
 
-        case "GET_DISCOVER_TV_DETAILS":
-            let discoverTVDetails = {};
-            getDiscoverTVDetails(discoverTVDetails, payload.pathId);
-            return { ...contextData, discoverTVDetails };
+        case "GET_SIMILAR_MOVIE_TV":
+            let similarMovieTV = [];
+            getSimilarMovieTV(similarMovieTV, payload.id);
+            return { ...contextData, similarMovieTV };
+
+        case "GET_PERSON_DETAIL":
+            let personDetail = {};
+            getPersonDetails(personDetail, payload.id, payload.path);
+            return { ...contextData, personDetail };
 
         default:
             return contextData;

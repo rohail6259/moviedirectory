@@ -10,9 +10,24 @@ const Discover = ({ type }) => {
     const [discoverData, setDiscoverData] = useState([]);
 
     useEffect(() => {
-        setTimeout(() => {
-            setDiscoverData(type === "movies" ? discoverMovies : discoverTV);
-        }, 200);
+        let isDataAvailable = false;
+
+        if (discoverMovies && discoverTV) fetchData();
+
+        function fetchData() {
+            if (isDataAvailable) return;
+
+            setTimeout(() => {
+                if (discoverMovies && discoverTV) {
+                    isDataAvailable = true;
+                    setDiscoverData(
+                        type === "movies" ? discoverMovies : discoverTV
+                    );
+                } else {
+                    fetchData();
+                }
+            }, 100);
+        }
     }, [type, discoverMovies, discoverTV]);
 
     return (
@@ -24,7 +39,7 @@ const Discover = ({ type }) => {
                 <div className="row">
                     {discoverData.map((item, idx) => (
                         <div
-                            className="col-6 col-md-3 col-lg-2 position-relative mb-4"
+                            className="col-6 col-md-4 col-lg-3 col-xl-2 position-relative mb-4"
                             key={`discover-${type}-${idx}`}
                         >
                             <Link

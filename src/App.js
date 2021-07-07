@@ -4,6 +4,7 @@ import { MDContext, initialState } from "./Services/context/context";
 import { reducer } from "./Services/reducer/reducer";
 import Home from "./Pages/Home";
 import ItemDetail from "./Pages/ItemDetail";
+import PersonDetail from "./Pages/PersonDetail";
 
 const App = () => {
     const [contextData, dispatch] = useReducer(reducer, initialState);
@@ -38,6 +39,7 @@ const App = () => {
                     <Route path="/" exact component={Home} />
                     <Route path="/movie/:id" component={ItemDetail} />
                     <Route path="/tv/:id" component={ItemDetail} />
+                    <Route path="/person/:id/:type" component={PersonDetail} />
                 </Switch>
             </Router>
         </MDContext.Provider>

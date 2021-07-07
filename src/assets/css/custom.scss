@@ -22,7 +22,7 @@
 }
 
 body {
-    background: #272727;
+    background: #171717;
     font-family: AvenirNextCyr-Regular;
 }
 
@@ -72,7 +72,8 @@ body {
 }
 
 .top-rated,
-.discover {
+.discover,
+.similar {
     h2 {
         font-family: AvenirNextCyr-Bold;
         color: var(--white);
@@ -80,7 +81,10 @@ body {
     .poster {
         border-radius: 5px;
         width: 100%;
-        height: 20em;
+        height: auto;
+        @media only screen and (min-width: 768px) {
+            height: 20em;
+        }
         object-fit: cover;
     }
     .filter {
@@ -123,8 +127,19 @@ body {
     .crew {
         overflow-x: auto;
         img {
-            width: 15em;
+            width: 12em;
             border-radius: 6px;
+        }
+        .name {
+            font-family: AvenirNextCyr-Bold;
+        }
+    }
+    .similar {
+        .poster {
+            border-radius: 5px;
+            width: 100%;
+            height: 20em;
+            object-fit: cover;
         }
     }
 }
