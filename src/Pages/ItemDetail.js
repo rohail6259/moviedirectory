@@ -41,13 +41,18 @@ const ItemDetail = ({ match }) => {
             if (isDataAvailable) return;
 
             setTimeout(() => {
-                if (discoverMovieTVDetails) {
+                if (
+                    discoverMovieTVDetails.movieTVData.id > 0 &&
+                    discoverMovieTVDetails.creditData.cast.length > 0 &&
+                    discoverMovieTVDetails.creditData.crew.length > 0
+                ) {
                     isDataAvailable = true;
+                    console.log(discoverMovieTVDetails.creditData.crew);
                     setItemDetailData(discoverMovieTVDetails);
                 } else {
                     fetchData();
                 }
-            }, 100);
+            }, 1000);
         }
     }, [discoverMovieTVDetails]);
 
@@ -240,7 +245,7 @@ const ItemDetail = ({ match }) => {
                                                 ?.revenue > 0 ? (
                                                 `$ ${itemDetailData?.movieTVData?.revenue}`
                                             ) : (
-                                                <p className="text-white">
+                                                <p className="text-white mb-0">
                                                     Not Available
                                                 </p>
                                             )}
@@ -255,7 +260,7 @@ const ItemDetail = ({ match }) => {
                                                 ?.budget > 0 ? (
                                                 `$ ${itemDetailData?.movieTVData?.budget}`
                                             ) : (
-                                                <p className="text-white">
+                                                <p className="text-white mb-0">
                                                     Not Available
                                                 </p>
                                             )}
@@ -302,36 +307,45 @@ const ItemDetail = ({ match }) => {
                         {/* CAST */}
                         <div className="cast py-5">
                             <h2 className="text-white pb-2">Cast</h2>
-                            {itemDetailData?.creditData?.cast.length > 30 ? (
+                            {itemDetailData?.creditData?.cast.length > 0 ? (
                                 <div className="row flex-row flex-nowrap">
                                     {itemDetailData?.creditData?.cast?.map(
-                                        (cast, idx) => {
-                                            return cast.profile_path !==
-                                                null ? (
-                                                <div
-                                                    key={`cast-${idx}`}
-                                                    className="col-auto"
+                                        (member, idx) => (
+                                            <div
+                                                onClick={() =>
+                                                    (contextData.currentType =
+                                                        category.current)
+                                                }
+                                                key={`member-${idx}`}
+                                                className="col-auto"
+                                            >
+                                                <Link
+                                                    to={
+                                                        member.profile_path !==
+                                                        null
+                                                            ? `/person/${member.id}`
+                                                            : false
+                                                    }
                                                 >
-                                                    <Link
-                                                        to={`/person/${cast.id}/${category.current}`}
-                                                    >
-                                                        <img
-                                                            className="img-fluid"
-                                                            src={`${process.env.REACT_APP_IMAGE_API}/w500/${cast.profile_path}`}
-                                                            alt={cast.name}
-                                                        />
-                                                        <h6 className="text-white pt-2 name">
-                                                            {cast.name}
-                                                        </h6>
-                                                        <h6 className="text-white character-name">
-                                                            {cast.character}
-                                                        </h6>
-                                                    </Link>
-                                                </div>
-                                            ) : (
-                                                ""
-                                            );
-                                        }
+                                                    <img
+                                                        className="img-fluid"
+                                                        src={`${
+                                                            member.profile_path !==
+                                                            null
+                                                                ? `${process.env.REACT_APP_IMAGE_API}/w500/${member.profile_path}`
+                                                                : "/sample.png"
+                                                        }`}
+                                                        alt={member.name}
+                                                    />
+                                                    <h6 className="text-white pt-2 name">
+                                                        {member.name}
+                                                    </h6>
+                                                    <h6 className="text-white character-name">
+                                                        {member.character}
+                                                    </h6>
+                                                </Link>
+                                            </div>
+                                        )
                                     )}
                                 </div>
                             ) : (
@@ -343,36 +357,45 @@ const ItemDetail = ({ match }) => {
                         {/* CREW */}
                         <div className="crew py-5">
                             <h2 className="text-white pb-2">Crew</h2>
-                            {itemDetailData?.creditData?.crew.length > 1 ? (
+                            {itemDetailData?.creditData?.crew.length > 0 ? (
                                 <div className="row flex-row flex-nowrap">
                                     {itemDetailData?.creditData?.crew?.map(
-                                        (crew, idx) => {
-                                            return crew.profile_path !==
-                                                null ? (
-                                                <div
-                                                    key={`cast-${idx}`}
-                                                    className="col-auto"
+                                        (member, idx) => (
+                                            <div
+                                                key={`cast-${idx}`}
+                                                className="col-auto"
+                                                onClick={() =>
+                                                    (contextData.currentType =
+                                                        category.current)
+                                                }
+                                            >
+                                                <Link
+                                                    to={
+                                                        member.profile_path !==
+                                                        null
+                                                            ? `/person/${member.id}`
+                                                            : false
+                                                    }
                                                 >
-                                                    <Link
-                                                        to={`/person/${crew.id}/${category.current}`}
-                                                    >
-                                                        <img
-                                                            className="img-fluid"
-                                                            src={`${process.env.REACT_APP_IMAGE_API}/w500/${crew.profile_path}`}
-                                                            alt={crew.name}
-                                                        />
-                                                        <h6 className="text-white pt-2 name">
-                                                            {crew.name}
-                                                        </h6>
-                                                        <h6 className="text-white character-name">
-                                                            {crew.job}
-                                                        </h6>
-                                                    </Link>
-                                                </div>
-                                            ) : (
-                                                ""
-                                            );
-                                        }
+                                                    <img
+                                                        className="img-fluid"
+                                                        src={`${
+                                                            member.profile_path !==
+                                                            null
+                                                                ? `${process.env.REACT_APP_IMAGE_API}/w500/${member.profile_path}`
+                                                                : "/sample.png"
+                                                        }`}
+                                                        alt={member.name}
+                                                    />
+                                                    <h6 className="text-white pt-2 name">
+                                                        {member.name}
+                                                    </h6>
+                                                    <h6 className="text-white character-name">
+                                                        {member.job}
+                                                    </h6>
+                                                </Link>
+                                            </div>
+                                        )
                                     )}
                                 </div>
                             ) : (

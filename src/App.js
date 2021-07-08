@@ -39,7 +39,7 @@ const App = () => {
                     <Route path="/" exact component={Home} />
                     <Route path="/movie/:id" component={ItemDetail} />
                     <Route path="/tv/:id" component={ItemDetail} />
-                    <Route path="/person/:id/:type" component={PersonDetail} />
+                    <Route path="/person/:id" component={PersonDetail} />
                 </Switch>
             </Router>
         </MDContext.Provider>
