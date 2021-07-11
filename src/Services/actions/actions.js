@@ -7,9 +7,25 @@ export async function getNowPlayingMovies(nowPlaying, path) {
         );
         let slicedData = data.results.slice(0, 6);
         if (slicedData)
-            slicedData.forEach((e) => {
-                if (e.poster_path !== "null") nowPlaying.push(e);
+            slicedData.forEach((movie) => {
+                if (movie.poster_path !== "null") {
+                    getNowPlayingGenres(movie, nowPlaying);
+                }
             });
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
+export async function getNowPlayingGenres(movie, nowPlaying) {
+    try {
+        let { data } = await axios.get(
+            `${process.env.REACT_APP_API_URL}/movie/${movie.id}?api_key=${process.env.REACT_APP_API_KEY}`
+        );
+        if (data) {
+            let genres = data.genres;
+            nowPlaying.push(Object.assign(movie, { genres }));
+        }
     } catch (err) {
         console.log(err.message);
     }
@@ -127,6 +143,21 @@ export async function getSimilarMovieTV(similarMovieTV, id) {
     }
 }
 
+export async function getPeople(people, page) {
+    try {
+        let { data } = await axios.get(
+            `${process.env.REACT_APP_API_URL}/person/popular?api_key=${process.env.REACT_APP_API_KEY}&page=${page}`
+        );
+        if (data.results) {
+            data.results.forEach((e) => {
+                if (e.profile_path !== null) people.push(e);
+            });
+        }
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
 export async function getPersonDetails(personDetail, id, path) {
     try {
         let { data } = await axios.get(
@@ -152,9 +183,30 @@ export async function getPersonMovieTVDetail(
             `${process.env.REACT_APP_API_URL}/person/${id}/${path}_credits?api_key=${process.env.REACT_APP_API_KEY}`
         );
         if (data) {
-            let credit = data
+            let credit = data;
             let newData = { personInfo, credit };
             Object.assign(personDetail, newData);
+        }
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
+export async function getSearchedList(searchList, query) {
+    try {
+        let { data } = await axios.get(
+            `${process.env.REACT_APP_API_URL}/search/multi?api_key=${process.env.REACT_APP_API_KEY}&query=${query}`
+        );
+        if (data.results) {
+            let slicedData = data.results.slice(0, 6);
+            slicedData.forEach((e) => {
+                if (
+                    e.profile_path !== null ||
+                    e.poster_path !== null ||
+                    e.backdrop_path !== null
+                )
+                    searchList.push(e);
+            });
         }
     } catch (err) {
         console.log(err.message);

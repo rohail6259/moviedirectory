@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import { MDContext } from "../../Services/context/context";
 import { Link } from "react-router-dom";
-import { FirstLetterCapital } from "../../Utils/FirstLetterCapital";
+import { MDContext } from "../Services/context/context";
+import { FirstLetterCapital } from '../Utils/FirstLetterCapital';
 
-const Discover = ({ type }) => {
+const MovieTVList = ({ type }) => {
     const { contextData } = useContext(MDContext);
     const { discoverMovies, discoverTV } = contextData;
 
@@ -140,4 +140,4 @@ const Discover = ({ type }) => {
     );
 };
 
-export default Discover;
+export default MovieTVList;

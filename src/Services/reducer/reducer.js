@@ -7,11 +7,18 @@ import {
     getDiscoverMovies,
     getDiscoverMoviesTVDetails,
     getSimilarMovieTV,
+    getPeople,
     getPersonDetails,
+    getSearchedList,
 } from "../actions/actions";
 
 export const reducer = (contextData = initialState, { type, payload }) => {
     switch (type) {
+        case "GET_SEARCHED_ITEM":
+            let searchList = [];
+            getSearchedList(searchList, payload.search);
+            return { ...contextData, searchList };
+
         case "GET_NOW_PLAYING_MOVIES":
             let nowPlaying = [];
             getNowPlayingMovies(nowPlaying, payload.path);
@@ -50,6 +57,11 @@ export const reducer = (contextData = initialState, { type, payload }) => {
             let similarMovieTV = [];
             getSimilarMovieTV(similarMovieTV, payload.id);
             return { ...contextData, similarMovieTV };
+
+        case "GET_PEOPLE":
+            let people = contextData.people;
+            getPeople(people, payload.page);
+            return { ...contextData, people };
 
         case "GET_PERSON_DETAIL":
             let personDetail = {};

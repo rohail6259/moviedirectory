@@ -1,6 +1,7 @@
 import { createContext } from "react";
 
 const initialState = {
+    searchList: [],
     nowPlaying: [],
     topRatedMovies: [],
     topRatedTV: [],
@@ -41,6 +42,7 @@ const initialState = {
         },
     },
     similarMovieTV: [],
+    people: [],
     personDetail: {
         credit: {
             id: null,

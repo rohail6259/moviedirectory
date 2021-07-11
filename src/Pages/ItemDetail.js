@@ -41,13 +41,8 @@ const ItemDetail = ({ match }) => {
             if (isDataAvailable) return;
 
             setTimeout(() => {
-                if (
-                    discoverMovieTVDetails.movieTVData.id > 0 &&
-                    discoverMovieTVDetails.creditData.cast.length > 0 &&
-                    discoverMovieTVDetails.creditData.crew.length > 0
-                ) {
+                if (discoverMovieTVDetails.movieTVData.id > 0) {
                     isDataAvailable = true;
-                    console.log(discoverMovieTVDetails.creditData.crew);
                     setItemDetailData(discoverMovieTVDetails);
                 } else {
                     fetchData();
@@ -63,24 +58,31 @@ const ItemDetail = ({ match }) => {
     }, [similarMovieTV]);
 
     return (
-        <section>
-            <div className="container-fluid item-details">
+        <section className="item-details">
+            {/* HERO VIDEO */}
+            <div className="container-fluid p-0">
                 <div className="row">
-                    {/* HERO VIDEO */}
                     <div className="col-12">
-                        <h5 className="text-white">
+                        <small className="text-white breadcrumb">
                             Home / {FirstLetterCapital(category.current)} /{" "}
                             {category.current === "movie"
                                 ? itemDetailData?.movieTVData?.original_title
                                 : itemDetailData?.movieTVData?.original_name}
-                        </h5>
+                        </small>
                         <video
                             preload="auto"
                             autoPlay={true}
                             controls={true}
-                            src="https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-1610-large.mp4"
+                            loop={true}
+                            poster="https://images.unsplash.com/photo-1621075160523-b936ad96132a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1350&q=80"
+                            src="/energy.mp4"
                         ></video>
                     </div>
+                </div>
+            </div>
+            {/* INFO & SIMILAR MOVIES */}
+            <div className="container-fluid">
+                <div className="row">
                     {/* SEPARATOR */}
                     <div className="hr"></div>
                     {/* MOVIE, CAST & CREW INFO */}
@@ -91,7 +93,7 @@ const ItemDetail = ({ match }) => {
                                 <img
                                     className="img-fluid poster"
                                     loading="eager"
-                                    src={`${process.env.REACT_APP_IMAGE_API}/w500/${itemDetailData?.movieTVData?.poster_path}`}
+                                    src={`${process.env.REACT_APP_IMAGE_API}/w500${itemDetailData?.movieTVData?.poster_path}`}
                                     alt={
                                         category.current === "movie"
                                             ? itemDetailData?.movieTVData
@@ -324,7 +326,7 @@ const ItemDetail = ({ match }) => {
                                                         member.profile_path !==
                                                         null
                                                             ? `/person/${member.id}`
-                                                            : false
+                                                            : '#'
                                                     }
                                                 >
                                                     <img
@@ -332,8 +334,8 @@ const ItemDetail = ({ match }) => {
                                                         src={`${
                                                             member.profile_path !==
                                                             null
-                                                                ? `${process.env.REACT_APP_IMAGE_API}/w500/${member.profile_path}`
-                                                                : "/sample.png"
+                                                                ? `${process.env.REACT_APP_IMAGE_API}/w500${member.profile_path}`
+                                                                : "/sample.jpeg"
                                                         }`}
                                                         alt={member.name}
                                                     />
@@ -374,7 +376,7 @@ const ItemDetail = ({ match }) => {
                                                         member.profile_path !==
                                                         null
                                                             ? `/person/${member.id}`
-                                                            : false
+                                                            : '#'
                                                     }
                                                 >
                                                     <img
@@ -382,8 +384,8 @@ const ItemDetail = ({ match }) => {
                                                         src={`${
                                                             member.profile_path !==
                                                             null
-                                                                ? `${process.env.REACT_APP_IMAGE_API}/w500/${member.profile_path}`
-                                                                : "/sample.png"
+                                                                ? `${process.env.REACT_APP_IMAGE_API}/w500${member.profile_path}`
+                                                                : "/sample.jpeg"
                                                         }`}
                                                         alt={member.name}
                                                     />
@@ -425,7 +427,7 @@ const ItemDetail = ({ match }) => {
                                             <img
                                                 className="img-fluid poster"
                                                 loading="eager"
-                                                src={`${process.env.REACT_APP_IMAGE_API}/w500/${movieTV.poster_path}`}
+                                                src={`${process.env.REACT_APP_IMAGE_API}/w500${movieTV.poster_path}`}
                                                 alt={movieTV.original_title}
                                             />
                                             <div className="col-12 px-0 mt-2 movie-info">
