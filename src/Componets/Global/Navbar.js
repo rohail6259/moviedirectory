@@ -3,16 +3,20 @@ import { NavLink, Link } from "react-router-dom";
 import { MDContext } from "../../Services/context/context";
 
 const Navbar = () => {
+    // GLOBAL STATE & DISPATCHER
     const { contextData, dispatch } = useContext(MDContext);
     const { searchList } = contextData;
 
+    // COMPONENT STATE
     const [searchData, setSearchData] = useState([]);
 
+    // ELEMENTS REFERENCE VARIABLE
     let navRef = useRef(null);
     let searchIconRef = useRef(null);
     let searchListRef = useRef(null);
     let inputRef = useRef(null);
 
+    // SCROLL EVENT LISTENER FOR NAV TO BE FIXED AND RELATIVE
     useEffect(() => {
         let lastScrollY = 0;
         let ticking = false;
@@ -38,6 +42,7 @@ const Navbar = () => {
         };
     }, []);
 
+    // SETING THE STATE WHEN THE COMPONENT LOADS
     useEffect(() => {
         setTimeout(() => {
             if (searchList.length > 0) {
@@ -47,6 +52,7 @@ const Navbar = () => {
         }, 500);
     }, [searchList, setSearchData]);
 
+    // FETCHING QUERY BASED ITEMS
     const handleSearch = (value) => {
         if (value)
             dispatch({
@@ -54,7 +60,8 @@ const Navbar = () => {
                 payload: { search: value },
             });
     };
-
+    
+    // WHEN INPUT FIELD LOSES FOCUS THEN HIDE THE SEARCHED ITEMS
     const hideSearchPanel = () => {
         setTimeout(() => {
             searchListRef.current.classList.add("d-none");
@@ -62,6 +69,7 @@ const Navbar = () => {
         }, 200);
     };
 
+    // IMAGE HANDLING FROM DIFFERENT POINTS
     const queryImageType = (item) => {
         if (item.media_type === "movie" || item.media_type === "tv") {
             if (item.poster_path !== null && item.backdrop_path !== null)
@@ -80,11 +88,13 @@ const Navbar = () => {
     return (
         <div className="container-fluid navbar-wrapper mb-2" ref={navRef}>
             <div className="row">
+                {/* LOGO */}
                 <div className="col-2 col-md-2 col-lg-2 col-xl-3 text-white">
                     <span className="logo">
                         <Link to="/">TVM</Link>
                     </span>
                 </div>
+                {/* NAV LINKS */}
                 <div className="col-8 col-md-6 col-lg-5 col-xl-5 d-none d-md-flex align-items-center justify-content-center text-center">
                     <ul className="d-flex align-items-center justify-content-around w-100 list-unstyled text-white mb-0 p">
                         <li>
@@ -112,6 +122,7 @@ const Navbar = () => {
                         </li>
                     </ul>
                 </div>
+                {/* SEARCH */}
                 <div className="col-10 col-md-4 col-lg-5 col-xl-4 d-flex align-items-center justify-content-end text-center position-relative">
                     <svg
                         ref={searchIconRef}

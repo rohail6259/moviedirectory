@@ -3,14 +3,17 @@ import { Link } from "react-router-dom";
 import { MDContext } from "../../Services/context/context";
 
 const TopRated = () => {
+    // GLOBAL STATE
     const { contextData } = useContext(MDContext);
     const { topRatedMovies, topRatedTV } = contextData;
 
+    // COMPONENT STATES
     const [topRatedMoviesData, setLatestMoviesData] = useState([]);
     const [topRatedTVData, setLatestTVData] = useState([]);
     const [activeMovieList, setActiveMovieList] = useState(true);
     const [activeTVList, setActiveTVList] = useState(false);
 
+    // RECURSIVE FUNCTION TO SET THE STATE WITH GLOBAL STATE DEPENDENCY, WHEN COMPONENT LOADS
     useEffect(() => {
         let isDataAvailable = false;
 
@@ -31,6 +34,7 @@ const TopRated = () => {
         }
     }, [topRatedMovies, topRatedTV]);
 
+    // FILTER
     const handleActiveList = (type) => {
         if (type === "movies") {
             setActiveMovieList(true);

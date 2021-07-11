@@ -4,11 +4,14 @@ import { Link } from "react-router-dom";
 import { FirstLetterCapital } from "../../Utils/FirstLetterCapital";
 
 const Discover = ({ type }) => {
+    // GLOBAL SATTE
     const { contextData } = useContext(MDContext);
     const { discoverMovies, discoverTV } = contextData;
 
+    // COMPONENT STATE
     const [discoverData, setDiscoverData] = useState([]);
 
+    // RECURSIVE FUNCTION TO SET THE STATE WITH GLOBAL STATE DEPENDENCY, WHEN COMPONENT LOADS
     useEffect(() => {
         let isDataAvailable = false;
 
@@ -33,12 +36,14 @@ const Discover = ({ type }) => {
     return (
         <section className="py-3 py-lg-4 py-xl-5">
             <div className="container-fluid discover">
+                {/* TITLE */}
                 <div className="col-12 mb-3 px-0">
                     <h2>
                         Discover {FirstLetterCapital(type)}{" "}
                         {type === "TV" ? "Series" : ""}
                     </h2>
                 </div>
+                {/* LIST */}
                 <div className="row">
                     {discoverData.map((item, idx) => (
                         <div

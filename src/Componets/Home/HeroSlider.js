@@ -12,14 +12,20 @@ import "swiper/swiper-bundle.min.css";
 import { Link } from "react-router-dom";
 
 const HeroSlider = () => {
+    // INITIALIZING SLIDER CORE FUNCTIONALITY
     SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay]);
 
+    // GLOBAL STATE
     const { contextData } = useContext(MDContext);
     const { nowPlaying } = contextData;
 
+    
     const [nowPlayingData, setNowPlaying] = useState([]);
+    
+    // ELEMENT REFERENCE VARIABLE
     const posterRef = useRef(null);
 
+    // RECURSIVE FUNCTION TO SET THE STATE WITH GLOBAL STATE DEPENDENCY, WHEN COMPONENT LOADS
     useEffect(() => {
         let isDataAvailable = false;
 
@@ -38,6 +44,7 @@ const HeroSlider = () => {
     }, [nowPlaying]);
 
     return (
+        // SLIDER
         <Swiper
             autoplay={{ delay: 3000 }}
             spaceBetween={0}

@@ -10,8 +10,10 @@ import PersonDetail from "./Pages/PersonDetail";
 import Navbar from "./Componets/Global/Navbar";
 
 const App = () => {
+    // REACT USEREDUCER - REDUX PATTERN
     const [contextData, dispatch] = useReducer(reducer, initialState);
 
+    // CALLING MULTIPLE API
     useEffect(() => {
         dispatch({
             type: "GET_NOW_PLAYING_MOVIES",
