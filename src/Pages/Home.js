@@ -11,7 +11,6 @@ const Home = () => {
     const introReelRef = useRef(null);
     const homeRef = useRef(null);
     const textWrapperRef = useRef(null);
-    const body = document.querySelector("body");
 
     useEffect(() => {
         const tl = gsap.timeline();
@@ -69,6 +68,7 @@ const Home = () => {
                     ease: "power4.out",
                     onComplete: () => {
                         introReelRef.current.classList.add("d-none");
+                        const body = document.querySelector("body");
                         body.style.overflow = "visible";
                     },
                 },
