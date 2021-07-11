@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { MDContext } from "../Services/context/context";
 import { Link } from "react-router-dom";
+import { PageTitle } from "../Utils/PageTitle";
 
 const PersonDetail = ({ match }) => {
     const {
@@ -11,6 +12,8 @@ const PersonDetail = ({ match }) => {
     const { personDetail, currentType } = contextData;
 
     const [personData, setPersonData] = useState({});
+
+    PageTitle(`TVM Directory - ${personDetail?.personInfo?.name || "Celebrity Profile"}`);
 
     useEffect(() => {
         dispatch({

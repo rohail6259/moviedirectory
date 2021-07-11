@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { MDContext } from "../Services/context/context";
-import { FirstLetterCapital } from '../Utils/FirstLetterCapital';
+import { FirstLetterCapital } from "../Utils/FirstLetterCapital";
+import { PageTitle } from "../Utils/PageTitle";
 
 const MovieTVList = ({ type }) => {
+    PageTitle(`TVM Directory - ${type === "movies" ? "Movies" : "TV Series"}`);
+
     const { contextData } = useContext(MDContext);
     const { discoverMovies, discoverTV } = contextData;
 

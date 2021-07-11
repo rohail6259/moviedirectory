@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import { MDContext } from "../Services/context/context";
 import { Link } from "react-router-dom";
 import { FirstLetterCapital } from "../Utils/FirstLetterCapital";
+import { PageTitle } from "../Utils/PageTitle";
 
 const ItemDetail = ({ match }) => {
     const {
@@ -17,6 +18,14 @@ const ItemDetail = ({ match }) => {
 
     const pathId = useRef(url);
     const category = useRef(url.split("/")[1]);
+
+    PageTitle(
+        `TVM Directory - ${
+            category.current === "movie"
+                ? itemDetailData?.movieTVData?.original_title
+                : itemDetailData?.movieTVData?.original_name
+        }`
+    );
 
     useEffect(() => {
         dispatch({
@@ -63,7 +72,7 @@ const ItemDetail = ({ match }) => {
             <div className="container-fluid p-0">
                 <div className="row">
                     <div className="col-12">
-                        <small className="text-white breadcrumb">
+                        <small className="text-white">
                             Home / {FirstLetterCapital(category.current)} /{" "}
                             {category.current === "movie"
                                 ? itemDetailData?.movieTVData?.original_title
@@ -326,7 +335,7 @@ const ItemDetail = ({ match }) => {
                                                         member.profile_path !==
                                                         null
                                                             ? `/person/${member.id}`
-                                                            : '#'
+                                                            : "#"
                                                     }
                                                 >
                                                     <img
@@ -376,7 +385,7 @@ const ItemDetail = ({ match }) => {
                                                         member.profile_path !==
                                                         null
                                                             ? `/person/${member.id}`
-                                                            : '#'
+                                                            : "#"
                                                     }
                                                 >
                                                     <img

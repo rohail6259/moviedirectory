@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { MDContext } from "../Services/context/context";
+import { PageTitle } from "../Utils/PageTitle";
 
 const People = () => {
+    PageTitle("TVM Directory - People");
+
     const { contextData, dispatch } = useContext(MDContext);
     const { people } = contextData;
 
@@ -63,7 +66,10 @@ const People = () => {
                         </div>
                         <div className="row">
                             <div className="col-12 d-flex align-items-center justify-content-center py-5">
-                                <button className="load-more" onClick={() => onClickLoadMore()}>
+                                <button
+                                    className="load-more"
+                                    onClick={() => onClickLoadMore()}
+                                >
                                     Load More
                                 </button>
                             </div>

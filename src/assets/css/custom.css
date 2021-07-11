@@ -27,6 +27,7 @@
 body {
   background: #171717;
   font-family: AvenirNextCyr-Regular;
+  overflow: hidden;
 }
 
 a:hover {
@@ -78,15 +79,64 @@ button:hover, button:focus, button:active {
   width: fit-content;
 }
 
+.intro-reel {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--white);
+}
+
+.intro-reel .block {
+  width: 1px;
+  height: 0%;
+  background: black;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  position: relative;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+}
+
+.intro-reel .block .wrapper {
+  margin: auto;
+  background: -webkit-gradient(linear, left top, left bottom, from(crimson), to(crimson)) white no-repeat 0 0;
+  background: linear-gradient(crimson, crimson) white no-repeat 0 0;
+  background-size: 0 100%;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.intro-reel .block .wrapper .title {
+  text-transform: uppercase;
+  font: bold 26vmax/0.8 Open Sans, Impact;
+  background: black;
+  display: table;
+  color: white;
+  mix-blend-mode: multiply;
+}
+
 .navbar-wrapper {
+  opacity: 0;
+  visibility: hidden;
   -webkit-backdrop-filter: blur(8px);
           backdrop-filter: blur(8px);
   position: relative;
   top: 0;
   z-index: 9999;
   padding: 0.6em 1.5em;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
+  -webkit-transition: positon 0.3s;
+  transition: positon 0.3s;
 }
 
 .navbar-wrapper .logo {
@@ -152,21 +202,26 @@ button:hover, button:focus, button:active {
   background: rgba(0, 0, 0, 0.2);
 }
 
-.swiper-container .swiper-scrollbar {
+.home {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.home .swiper-container .swiper-scrollbar {
   display: none;
 }
 
-.swiper-container .swiper-pagination-bullet {
+.home .swiper-container .swiper-pagination-bullet {
   background: var(--white);
   opacity: 0.5;
 }
 
-.swiper-container .swiper-pagination-bullet-active {
+.home .swiper-container .swiper-pagination-bullet-active {
   background: #5555fd;
   opacity: 1;
 }
 
-.swiper-container .hero .info {
+.home .swiper-container .hero .info {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -177,7 +232,7 @@ button:hover, button:focus, button:active {
   transition: opacity 0.3s;
 }
 
-.swiper-container .hero .info .title {
+.home .swiper-container .hero .info .title {
   font-family: AvenirNextCyr-Bold;
   width: 250px;
   white-space: nowrap;
@@ -185,7 +240,7 @@ button:hover, button:focus, button:active {
   text-overflow: ellipsis;
 }
 
-.swiper-container .hero .info .overview {
+.home .swiper-container .hero .info .overview {
   font-size: 14px;
   display: -webkit-box;
   max-width: 330px;
@@ -194,7 +249,7 @@ button:hover, button:focus, button:active {
   overflow: hidden;
 }
 
-.swiper-container .hero .hero-poster {
+.home .swiper-container .hero .hero-poster {
   height: auto;
   width: 100%;
   -o-object-fit: contain;
@@ -202,16 +257,16 @@ button:hover, button:focus, button:active {
 }
 
 @media only screen and (min-width: 1025px) {
-  .swiper-container .hero .hero-poster {
+  .home .swiper-container .hero .hero-poster {
     height: 80vh;
   }
 }
 
-.swiper-container .hero .genres {
+.home .swiper-container .hero .genres {
   font-size: 14px;
 }
 
-.swiper-container .hero:hover .info {
+.home .swiper-container .hero:hover .info {
   opacity: 1;
   background: white;
   background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0)), to(rgba(0, 0, 0, 0.7)));
