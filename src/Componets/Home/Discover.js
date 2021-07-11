@@ -31,7 +31,7 @@ const Discover = ({ type }) => {
     }, [type, discoverMovies, discoverTV]);
 
     return (
-        <section className="py-5">
+        <section className="py-3 py-lg-4 py-xl-5">
             <div className="container-fluid discover">
                 <div className="col-12 mb-3 px-0">
                     <h2>

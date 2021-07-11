@@ -175,7 +175,10 @@ button {
             }
         }
         .hero-poster {
-            height: 80vh;
+            height: auto;
+            @media only screen and (min-width: 1025px) {
+                height: 80vh;
+            }
             width: 100%;
             object-fit: contain;
         }

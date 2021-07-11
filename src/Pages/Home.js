@@ -8,12 +8,12 @@ const Home = () => {
     PageTitle("TVM Directory - Home");
 
     return (
-        <>
+        <section className="home">
             <HeroSlider />
             <TopRated />
             <Discover type="movies" />
             <Discover type="TV" />
-        </>
+        </section>
     );
 };
 

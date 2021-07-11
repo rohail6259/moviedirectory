@@ -42,7 +42,7 @@ const TopRated = () => {
     };
 
     return (
-        <section className="py-5">
+        <section className="pt-5 pb-3 pt-md-5 pt-lg-5 pb-lg-4 py-xl-5">
             <div className="container-fluid top-rated">
                 {/* FILTERS */}
                 <div className="row">
