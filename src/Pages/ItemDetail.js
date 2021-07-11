@@ -3,22 +3,33 @@ import { MDContext } from "../Services/context/context";
 import { Link } from "react-router-dom";
 import { FirstLetterCapital } from "../Utils/FirstLetterCapital";
 import { PageTitle } from "../Utils/PageTitle";
+import EnableScrolling from "../Utils/EnableScrolling";
+import FadeInPage from "../Utils/FadeInPage";
 
 const ItemDetail = ({ match }) => {
+    // ENABLE BODY SCROLL
+    EnableScrolling();
+
+    // URL PATH & QUERY ID
     const {
         params: { id },
         url,
     } = match;
-
-    const { contextData, dispatch } = useContext(MDContext);
-    const { discoverMovieTVDetails, similarMovieTV } = contextData;
-
-    const [itemDetailData, setItemDetailData] = useState({});
-    const [similarData, setSimilarData] = useState([]);
-
     const pathId = useRef(url);
     const category = useRef(url.split("/")[1]);
 
+    // ELEMENT REFERENCE VARIABLE
+    const itemDetailsRef = useRef(null);
+
+    // GLOBAL STATE DATA & DISPATCHER
+    const { contextData, dispatch } = useContext(MDContext);
+    const { discoverMovieTVDetails, similarMovieTV } = contextData;
+
+    // COMPONENT STATES
+    const [itemDetailData, setItemDetailData] = useState({});
+    const [similarData, setSimilarData] = useState([]);
+
+    // PAGE TITLE HELPER FUNCTION
     PageTitle(
         `TVM Directory - ${
             category.current === "movie"
@@ -27,6 +38,7 @@ const ItemDetail = ({ match }) => {
         }`
     );
 
+    // FETCH "GET_DISCOVER_MOVIES_TV_DETAILS" DATA WHEN COMPONENT LOADS
     useEffect(() => {
         dispatch({
             type: "GET_DISCOVER_MOVIES_TV_DETAILS",
@@ -34,6 +46,7 @@ const ItemDetail = ({ match }) => {
         });
     }, [dispatch]);
 
+    // FETCH "GET_SIMILAR_MOVIE_TV" DATA WHEN COMPONENT LOADS
     useEffect(() => {
         dispatch({
             type: "GET_SIMILAR_MOVIE_TV",
@@ -41,6 +54,7 @@ const ItemDetail = ({ match }) => {
         });
     }, [dispatch, id]);
 
+    // RECURSIVE FUNCTION TO SET THE STATE WITH GLOBAL STATE DEPENDENCY, WHEN COMPONENT LOADS
     useEffect(() => {
         let isDataAvailable = false;
 
@@ -53,6 +67,7 @@ const ItemDetail = ({ match }) => {
                 if (discoverMovieTVDetails.movieTVData.id > 0) {
                     isDataAvailable = true;
                     setItemDetailData(discoverMovieTVDetails);
+                    FadeInPage(itemDetailsRef.current);
                 } else {
                     fetchData();
                 }
@@ -60,6 +75,7 @@ const ItemDetail = ({ match }) => {
         }
     }, [discoverMovieTVDetails]);
 
+    // SETTING STATE WITH 1 SECOND DELAY WITH GLOBAL STATE DEPENDENCY, WHEN COMPONENT LOADS
     useEffect(() => {
         setTimeout(() => {
             setSimilarData(similarMovieTV);
@@ -67,7 +83,7 @@ const ItemDetail = ({ match }) => {
     }, [similarMovieTV]);
 
     return (
-        <section className="item-details">
+        <section className="item-details" ref={itemDetailsRef}>
             {/* HERO VIDEO */}
             <div className="container-fluid p-0">
                 <div className="row">

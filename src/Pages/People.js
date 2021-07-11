@@ -1,21 +1,41 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Link } from "react-router-dom";
 import { MDContext } from "../Services/context/context";
 import { PageTitle } from "../Utils/PageTitle";
+import EnableScrolling from "../Utils/EnableScrolling";
+import FadeInPage from "../Utils/FadeInPage";
 
 const People = () => {
+    // PAGE TITLE HELPER FUNCTION
     PageTitle("TVM Directory - People");
 
+    // ENABLE BODY SCROLL
+    EnableScrolling();
+
+    // ELEMENT REFERENCE VARIBALE
+    const celebRef = useRef(null);
+
+    // GLOBAL STATE & DISPATCHER
     const { contextData, dispatch } = useContext(MDContext);
     const { people } = contextData;
 
+    // COMPONENT STATES
     const [peopleData, setPeopleData] = useState([]);
     const [pageCount, setPageCount] = useState(1);
 
+    // FETCH "GET_PEOPLE" DATA WHEN COMPONENT LOADS
     useEffect(() => {
         dispatch({ type: "GET_PEOPLE", payload: { page: pageCount } });
     }, [dispatch, pageCount]);
 
+    // FADING IN PAGE WITH 1 SECOND DELAPY WHEN COMPONENT LOADS
+    useEffect(() => {
+        setTimeout(() => {
+            FadeInPage(celebRef.current);
+        }, 1000);
+    }, []);
+
+    // SETTING COMPONENT STATE WITH HALF A SECOND DELAY WHEN COMPONENT LOADS
     useEffect(() => {
         setTimeout(() => {
             let data = [...people];
@@ -23,6 +43,7 @@ const People = () => {
         }, 500);
     }, [people, pageCount]);
 
+    // LOAD MORE ITEMS
     const onClickLoadMore = () => {
         let count = pageCount;
         count += 1;
@@ -30,11 +51,12 @@ const People = () => {
     };
 
     return (
-        <section>
-            <div className="container-fluid celeb">
+        <section className="celeb" ref={celebRef}>
+            <div className="container-fluid">
                 <div className="row">
                     <div className="col-12 cast">
                         <h2 className="text-white pb-2">People</h2>
+                        {/* LIST */}
                         <div className="row">
                             {peopleData.map((p, idx) => (
                                 <div
@@ -64,6 +86,7 @@ const People = () => {
                                 </div>
                             ))}
                         </div>
+                        {/* LOAD MORE BUTTON */}
                         <div className="row">
                             <div className="col-12 d-flex align-items-center justify-content-center py-5">
                                 <button

@@ -336,8 +336,9 @@ button:hover, button:focus, button:active {
   fill: var(--white);
 }
 
-.item-details .breadcrumb {
-  font-size: 14px;
+.item-details {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .item-details h2 {
@@ -385,6 +386,16 @@ button:hover, button:focus, button:active {
      object-fit: cover;
 }
 
+.movietv-list {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.celeb {
+  opacity: 0;
+  visibility: hidden;
+}
+
 .celeb h2 {
   font-family: AvenirNextCyr-Bold;
 }
@@ -400,6 +411,11 @@ button:hover, button:focus, button:active {
   background: #5555fd;
   padding: 0.5em 1em;
   font-family: AvenirNextCyr-Bold;
+}
+
+.person {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .person .picture {

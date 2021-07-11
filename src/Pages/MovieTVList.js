@@ -1,17 +1,29 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { Link } from "react-router-dom";
 import { MDContext } from "../Services/context/context";
 import { FirstLetterCapital } from "../Utils/FirstLetterCapital";
 import { PageTitle } from "../Utils/PageTitle";
+import EnableScrolling from "../Utils/EnableScrolling";
+import FadeInPage from "../Utils/FadeInPage";
 
 const MovieTVList = ({ type }) => {
+    // ENABLE BODY SCROLL
+    EnableScrolling();
+
+    // ELEMENT REFERENCE VARIBALE
+    const movieTVListRef = useRef(null);
+
+    // PAGE TITLE HELPER FUNCTION
     PageTitle(`TVM Directory - ${type === "movies" ? "Movies" : "TV Series"}`);
 
+    // GLOBAL STATE
     const { contextData } = useContext(MDContext);
     const { discoverMovies, discoverTV } = contextData;
 
+    // COMPONENT STATES
     const [discoverData, setDiscoverData] = useState([]);
 
+    // RECURSIVE FUNCTION TO SET THE STATE WITH GLOBAL STATE DEPENDENCY, WHEN COMPONENT LOADS
     useEffect(() => {
         let isDataAvailable = false;
 
@@ -26,22 +38,25 @@ const MovieTVList = ({ type }) => {
                     setDiscoverData(
                         type === "movies" ? discoverMovies : discoverTV
                     );
+                    FadeInPage(movieTVListRef.current);
                 } else {
                     fetchData();
                 }
-            }, 100);
+            }, 1000);
         }
     }, [type, discoverMovies, discoverTV]);
 
     return (
-        <section className="py-5">
+        <section className="py-5 movietv-list" ref={movieTVListRef}>
             <div className="container-fluid discover">
+                {/* TITLE */}
                 <div className="col-12 mb-3 px-0">
                     <h2>
                         Discover {FirstLetterCapital(type)}{" "}
                         {type === "TV" ? "Series" : ""}
                     </h2>
                 </div>
+                {/* LIST */}
                 <div className="row">
                     {discoverData.map((item, idx) => (
                         <div
