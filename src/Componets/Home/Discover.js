@@ -21,7 +21,7 @@ const Discover = ({ type }) => {
             if (isDataAvailable) return;
 
             setTimeout(() => {
-                if (discoverMovies && discoverTV) {
+                if (discoverMovies.length > 0 && discoverTV.length > 0) {
                     isDataAvailable = true;
                     setDiscoverData(
                         type === "movies" ? discoverMovies : discoverTV

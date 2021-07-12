@@ -102,6 +102,7 @@ const Home = () => {
                         ease: "power4.out",
                         onComplete: () => {
                             sessionStorage.setItem("isLoaded", true);
+                            EnableScrolling()
                         },
                     },
                     7
