@@ -78,10 +78,10 @@ const Discover = ({ type }) => {
                                         <div className="d-flex">
                                             <small>
                                                 {type === "movies"
-                                                    ? item.release_date.split(
+                                                    ? item?.release_date?.split(
                                                           "-"
                                                       )[0]
-                                                    : item.first_air_date.split(
+                                                    : item?.first_air_date?.split(
                                                           "-"
                                                       )[0]}{" "}
                                                 |

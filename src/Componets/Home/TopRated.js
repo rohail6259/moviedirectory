@@ -23,7 +23,7 @@ const TopRated = () => {
             if (isDataAvailable) return;
 
             setTimeout(() => {
-                if (topRatedMovies && topRatedTV) {
+                if (topRatedMovies.length > 0 && topRatedTV.length > 0) {
                     isDataAvailable = true;
                     setLatestMoviesData(topRatedMovies);
                     setLatestTVData(topRatedTV);
