@@ -306,6 +306,9 @@ button {
     .cast,
     .crew {
         overflow-x: auto;
+        &::-webkit-scrollbar {
+            display: none;
+        }
         img {
             width: 12em;
             max-height: 18.024375em;
