@@ -27,7 +27,12 @@
 body {
   background: #171717;
   font-family: AvenirNextCyr-Regular;
-  overflow: hidden;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 a:hover {
@@ -364,6 +369,11 @@ button:hover, button:focus, button:active {
 .item-details .cast,
 .item-details .crew {
   overflow-x: auto;
+}
+
+.item-details .cast::-webkit-scrollbar,
+.item-details .crew::-webkit-scrollbar {
+  display: none;
 }
 
 .item-details .cast img,
